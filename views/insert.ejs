@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!--부트스트랩 데이트픽업  -->
+    <script type='text/javascript' src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.7.1/js/bootstrap-datepicker.min.js"></script>
+    
+</head>
+<body>
+    <div class="container">
+        <h1>File Upload</h1>
+        <div class="d-flex justify-content-start">
+        <div  class="col">  
+            <input type="text" class="form-control" id="daily_input" data="daily_file" readonly>
+        </div>
+        <form enctype="multipart/form-data" class="daily_form">
+          <div class="file-field input-field">
+            <div class="btn grey">
+              <span>daily_File</span>
+              <input name="image" type="file" class="main_imag">
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="d-flex justify-content-start">
+        <div  class="col">  
+            <input type="text" class="form-control" id="report_input" data="report_file" readonly>
+        </div>
+        <form enctype="multipart/form-data" class="report_form">
+          <div class="file-field input-field">
+            <div class="btn grey">
+              <span>report_File</span>
+              <input name="image" type="file" class="main_imag">
+            </div>
+          </div>
+        </form>
+      </div>
+
+
+
+      <div class="text-center">
+        <button type="button" class="btn btn-primary" id="insertCourse" onclick="insertCourse()">저장</button>
+    </div>
+    </div>
+
+
+
+
+
+      <script>
+          $(document).ready(function(){
+            $('.daily_form').change(function(e){
+                let $row = $(this);
+                let form = $row[0];
+                let formData = new FormData(form)
+                formData.append('type' , 'daily')
+              
+                
+                
+                $.ajax({
+                    type : "POST",
+                    url : "/api/files/upload",
+                    data : formData,
+                    processData : false,
+                    contentType : false,
+                    success : function(data){
+                        const link = data.link;
+                        if($('#daily_input').attr('data') === "daily_file"){
+                            $('#daily_input').val(link)
+                        }
+                    },
+                    error : function(err){
+                        console.error("Error" , err)
+                    }
+                })
+            })
+
+
+            $('.report_form').change(function(e){
+                let $row = $(this);
+                let form = $row[0];
+                let formData = new FormData(form)
+                formData.append('type' , 'report')
+              
+                
+                console.log('123' , $('#report_input').attr('data') )
+                $.ajax({
+                    type : "POST",
+                    url : "/api/files/upload",
+                    data : formData,
+                    processData : false,
+                    contentType : false,
+                    success : function(data){
+                        const link = data.link;
+                        if($('#report_input').attr('data') === "report_file"){
+                            $('#report_input').val(link)
+                        }
+                    },
+                    error : function(err){
+                        console.error("Error" , err)
+                    }
+                })
+            })
+
+
+                
+      
+          })
+
+      
+          function insertCourse(){
+               
+               const reportImg = $('#report_input').val();
+               const dailyImg = $('#daily_input').val();
+
+               if(dailyImg == ""){
+                   alert('Daily파일을 업로드해주세요.')
+                   return false
+               }
+
+               if(reportImg == ""){
+                   alert('Report파일을 업로드해주세요.')
+                   return false
+               }
+
+
+               $.ajax({
+                   url : "/signal/insert",
+                   type : "POST",
+                   dataType : "JSON",
+                   data : {
+                    reportImg , dailyImg
+                   },
+                   success : function(data){
+                    if(data.msg === 'success'){
+                        alert("데이터 저장을 했습니다.")
+                        window.location.href = "/"
+                    }else{
+                        alert("데이터 저장을 실패했습니다.")
+                        location.reload();
+                    }
+                   }    
+               })
+
+              
+               
+           }
+
+
+
+          
+      </script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1 class="mt-5">report review</h1>
+        <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">번호</th>
+                <th scope="col">report 이미지</th>
+                <th scope="col">daily 이미지</th>
+                <th scope="col">업로드일자</th>
+              </tr>
+            </thead>
+            <tbody>
+                <% for(let report of reportData){ %>
+                    <tr>
+                        <th scope="row"><%= report.no %></th>
+                        <td><a href="<%= report.dImg %>" target="blank"><%= report.dImg %></a></td>
+                        <td><a href="<%= report.rImg %>" target="blank"><%= report.rImg %></a></td>
+                        <td><%= report.regDate %></td>
+                        <td>
+                            <button class="btn btn-info">수정</button>
+                            <button class="btn btn-danger">삭제</button>
+                        </td>
+                      </tr>
+                <% } %>
+        
+            </tbody>
+          </table>
+     
+    </div>
+</body>
+</html>
